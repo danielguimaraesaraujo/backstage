@@ -1,0 +1,73 @@
+apiVersion: scaffolder.backstage.io/v1beta3
+kind: Template
+metadata:
+  name: exemplo-template-github
+  title: Projeto Exemplo via GitHub
+  description: Template simples para criar um projeto a partir de um repositório GitHub
+spec:
+  owner: equipe-ti
+  type: service
+
+  parameters:
+    - title: Informações do Projeto
+      required:
+        - nomeProjeto
+        - descricao
+        - owner
+      properties:
+        nomeProjeto:
+          type: string
+          title: Nome do Projeto
+          description: Nome do repositório que será criado
+        descricao:
+          type: string
+          title: Descrição
+          description: Descrição do projeto
+        owner:
+          type: string
+          title: Dono do Projeto
+          description: Quem será o responsável (ex: user ou org no GitHub)
+
+    - title: Configurações do Repositório
+      required:
+        - visibility
+      properties:
+        visibility:
+          type: string
+          title: Visibilidade do repositório
+          enum: [public, private]
+          default: private
+
+  steps:
+    - id: template
+      name: Gerar código do projeto
+      action: fetch:template
+      input:
+        url: https://github.com/danielguimaraesaraujo/backstage.git
+        values:
+          nomeProjeto: ${{ parameters.nomeProjeto }}
+          descricao: ${{ parameters.descricao }}
+          owner: ${{ parameters.owner }}
+
+    - id: criar-repo
+      name: Criar repositório no GitHub
+      action: publish:github
+      input:
+        allowedHosts: ['github.com']
+        description: ${{ parameters.descricao }}
+        repoUrl: github.com/${{ parameters.owner }}/${{ parameters.nomeProjeto }}
+        visibility: ${{ parameters.visibility }}
+
+    - id: registrar-no-catalogo
+      name: Registrar no catálogo do Backstage
+      action: catalog:register
+      input:
+        repoContentsUrl: https://github.com/${{ parameters.owner }}/${{ parameters.nomeProjeto }}/blob/main
+        catalogInfoPath: catalog-info.yaml
+
+  output:
+    links:
+      - title: Acesse seu novo projeto no GitHub
+        url: https://github.com/${{ parameters.owner }}/${{ parameters.nomeProjeto }}
+      - title: Veja no catálogo do Backstage
+        url: /catalog/default/component/${{ parameters.nomeProjeto }}
