@@ -43,7 +43,7 @@ spec:
       name: Gerar código do projeto
       action: fetch:template
       input:
-        url: https://github.com/danielguimaraesaraujo/backstage.git
+        url: https://github.com/danielguimaraesaraujo/backstage
         values:
           nomeProjeto: ${{ parameters.nomeProjeto }}
           descricao: ${{ parameters.descricao }}
