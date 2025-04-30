@@ -4,7 +4,6 @@ metadata:
   name: exemplo-template-github
   title: Projeto Exemplo via GitHub
   description: Template simples para criar um projeto a partir de um repositório GitHub
-
 spec:
   owner: equipe-ti
   type: service
@@ -40,6 +39,12 @@ spec:
           default: private
 
   steps:
+    - id: log-inicio
+      name: Início do processo
+      action: debug:log
+      input:
+        message: "Iniciando geração do projeto a partir do template remoto"
+
     - id: template
       name: Gerar código do projeto
       action: fetch:template
@@ -50,14 +55,45 @@ spec:
           descricao: ${{ parameters.descricao }}
           owner: ${{ parameters.owner }}
 
+    - id: log-template-ok
+      name: Código gerado
+      action: debug:log
+      input:
+        message: "Template aplicado com sucesso. Próximo passo: criação do repositório no GitHub"
+
+    - id: log-template-values
+      name: Verificar valores do template
+      action: debug:log
+      input:
+        message: |
+          Valores do template:
+          - Nome do Projeto: ${{ parameters.nomeProjeto }}
+          - Descrição: ${{ parameters.descricao }}
+          - Dono: ${{ parameters.owner }}
+
     - id: criar-repo
       name: Criar repositório no GitHub
       action: publish:github
       input:
         allowedHosts: ['github.com']
         description: ${{ parameters.descricao }}
-        repoUrl: github.com/${{ parameters.owner }}/${{ parameters.nomeProjeto }}
+        repoUrl: https://github.com/${{ parameters.owner }}/${{ parameters.nomeProjeto }}
         visibility: ${{ parameters.visibility }}
+
+    - id: log-repo-values
+      name: Verificar valores do repositório
+      action: debug:log
+      input:
+        message: |
+          Valores do repositório:
+          - URL: https://github.com/${{ parameters.owner }}/${{ parameters.nomeProjeto }}
+          - Visibilidade: ${{ parameters.visibility }}
+
+    - id: log-github-ok
+      name: Repositório criado
+      action: debug:log
+      input:
+        message: "Repositório criado no GitHub com sucesso. Registrando no catálogo agora."
 
     - id: registrar-no-catalogo
       name: Registrar no catálogo do Backstage
@@ -65,6 +101,15 @@ spec:
       input:
         repoContentsUrl: https://github.com/${{ parameters.owner }}/${{ parameters.nomeProjeto }}/blob/main
         catalogInfoPath: catalog-info.yaml
+
+    - id: log-catalog-values
+      name: Verificar valores do catálogo
+      action: debug:log
+      input:
+        message: |
+          Valores do catálogo:
+          - URL do conteúdo do repositório: https://github.com/${{ parameters.owner }}/${{ parameters.nomeProjeto }}/blob/main
+          - Caminho do arquivo de catálogo: catalog-info.yaml
 
   output:
     links:
