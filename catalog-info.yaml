@@ -77,7 +77,7 @@ spec:
       input:
         allowedHosts: ['github.com']
         description: ${{ parameters.descricao }}
-        repoUrl: https://github.com/${{ parameters.owner }}/${{ parameters.nomeProjeto }}
+        repoUrl: github.com?owner=${{ parameters.owner }}&repo=${{ parameters.nomeProjeto }}
         visibility: ${{ parameters.visibility }}
 
     - id: log-repo-values
