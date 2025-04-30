@@ -4,6 +4,7 @@ metadata:
   name: exemplo-template-github
   title: Projeto Exemplo via GitHub
   description: Template simples para criar um projeto a partir de um repositório GitHub
+
 spec:
   owner: equipe-ti
   type: service
@@ -26,7 +27,7 @@ spec:
         owner:
           type: string
           title: Dono do Projeto
-          description: Quem será o responsável (ex: user ou org no GitHub)
+          description: "Quem será o responsável (ex: user ou org no GitHub)"
 
     - title: Configurações do Repositório
       required:
