@@ -1,0 +1,50 @@
+apiVersion: scaffolder.backstage.io/v1beta3
+kind: Template
+metadata:
+  name: exemplo-backstage
+  title: Projeto Exemplo via GitHub
+  description: Template simples para criar um projeto a partir de um repositório GitHub
+spec:
+  owner: equipe-ti
+  type: service
+
+  parameters:
+    - title: Informações do Projeto
+      required: [nomeProjeto, descricao, owner]
+      properties:
+        nomeProjeto:
+          type: string
+          title: Nome do Projeto
+        descricao:
+          type: string
+          title: Descrição
+        owner:
+          type: string
+          title: Dono do Projeto
+
+    - title: Configurações do Repositório
+      required: [visibility]
+      properties:
+        visibility:
+          type: string
+          title: Visibilidade do repositório
+          enum: [public, private]
+          default: private
+
+  steps:
+    - id: fetch
+      name: Baixar skeleton
+      action: fetch:template
+      input:
+        url: https://github.com/danielguimaraesaraujo/backstage
+
+    - id: log
+      name: Pronto!
+      action: debug:log
+      input:
+        message: "Skeleton baixado com sucesso para {{ parameters.nomeProjeto }}"
+
+  output:
+    links:
+      - title: Ver no GitHub
+        url: https://github.com/{{ parameters.owner }}/{{ parameters.nomeProjeto }}
