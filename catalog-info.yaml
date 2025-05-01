@@ -1,8 +1,8 @@
 apiVersion: scaffolder.backstage.io/v1beta3
 kind: Template
 metadata:
-  name: template-github
-  title: Projeto via GitHub
+  name: exemplo-template-github
+  title: Projeto Exemplo via GitHub
   description: Template simples para criar um projeto a partir de um repositório GitHub
 spec:
   owner: equipe-ti
@@ -49,7 +49,7 @@ spec:
       name: Gerar código do projeto
       action: fetch:template
       input:
-        url: https://github.com/danielguimaraesaraujo
+        url: https://github.com/danielguimaraesaraujo/backstage
         values:
           nomeProjeto: ${{ parameters.nomeProjeto }}
           descricao: ${{ parameters.descricao }}
