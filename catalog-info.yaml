@@ -1,8 +1,8 @@
 apiVersion: scaffolder.backstage.io/v1beta3
 kind: Template
 metadata:
-  name: exemplo-template-github
-  title: Projeto Exemplo via GitHub
+  name: template-github
+  title: Projeto via GitHub
   description: Template simples para criar um projeto a partir de um repositório GitHub
 spec:
   owner: equipe-ti
