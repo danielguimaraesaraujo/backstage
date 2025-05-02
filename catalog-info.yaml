@@ -18,15 +18,12 @@ spec:
         nomeProjeto:
           type: string
           title: Nome do Projeto
-          description: Nome do repositório que será criado
         descricao:
           type: string
           title: Descrição
-          description: Descrição do projeto
         owner:
           type: string
           title: Dono do Projeto
-          description: "Quem será o responsável (ex: user ou org no GitHub)"
 
     - title: Configurações do Repositório
       required:
@@ -54,6 +51,7 @@ spec:
           nomeProjeto: ${{ parameters.nomeProjeto }}
           descricao: ${{ parameters.descricao }}
           owner: ${{ parameters.owner }}
+          visibility: ${{ parameters.visibility }}
 
     - id: log-template-ok
       name: Código gerado
@@ -75,10 +73,11 @@ spec:
       name: Criar repositório no GitHub
       action: publish:github
       input:
-        allowedHosts: ['github.com']
+        owner: ${{ parameters.owner }}
+        repo: ${{ parameters.nomeProjeto }}
         description: ${{ parameters.descricao }}
-        repoUrl: github.com?owner=${{ parameters.owner }}&repo=${{ parameters.nomeProjeto }}
         visibility: ${{ parameters.visibility }}
+        defaultBranch: main
 
     - id: log-repo-values
       name: Verificar valores do repositório
